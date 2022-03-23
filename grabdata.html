@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+
+
+        br{
+            display: block;
+            margin: 1px 0;
+        }
+        h4 {
+            text-align: left;
+        }
+        .buttontoy{
+            background-color: #0d91dd;
+            transition-duration: 0.2s;
+            border: groove 1px rgb(77, 72, 72);
+            cursor:pointer;
+
+
+        }
+        .buttontoy:hover{
+        background-color: #7e837e; /* Green */
+         border: groove 1px rgb(77, 72, 72);
+         cursor:pointer            
+        }
+        .buttonpeug{
+            background-color: #0d91dd;
+            transition-duration: 0.2s;
+            border: groove 1px rgb(77, 72, 72);
+            cursor:pointer;
+
+
+        }
+        .buttonpeug:hover{
+        background-color: #7e837e; /* Green */
+         border: groove 1px rgb(77, 72, 72);
+         cursor:pointer            
+        }
+
+        .buttonhi {
+            background-color: #4CAF50;
+            transition-duration: 0.2s;
+            border: groove 1px rgb(77, 72, 72);
+            cursor:pointer;
+
+        }
+
+        .buttonhi:hover {
+         background-color: #7e837e; /* Green */
+         border: groove 1px rgb(77, 72, 72);
+         cursor:pointer
+        
+        }
+        .buttonmed {
+            background-color: #ff9100;
+            transition-duration: 0.2s;
+            border: groove 1px rgb(77, 72, 72);
+            cursor:pointer
+        }
+
+        .buttonmed:hover {
+         background-color: #7e837e; /* Green */
+         border: groove 1px rgb(77, 72, 72);
+         cursor:pointer
+        
+        }
+        .buttonlow {
+            background-color: #f44336;
+            transition-duration: 0.2s;
+            border: groove 1px rgb(77, 72, 72);
+            cursor:pointer
+        }
+
+        .buttonlow:hover {
+         background-color: #7e837e; /* Green */
+         border: groove 1px rgb(77, 72, 72);
+         cursor:pointer
+        
+        }
+        
+
+    </style>
+
+
+</head>
+<body style="background-color:#242526;">
+    <div id='container' style='width:100%;'>
+        <div id="leftside" style="width: 20%;">
+
+            <input style="width: 99%;float: left;"id="searchbar" onkeyup="search()" type="text"name='search'placeholder='Search'></input>
+
+
+
+        <div id='table'class='left' style='height:50vh;width:100%;float:left;border:4px solid rgb(49, 55, 63);overflow: auto;'>
+            <ol style="height:100%;list-style-type: none;padding-left: 0;" id="list">
+            </ol>
+        </div>
+
+        <div style='height:25.4vh;width:100%;float:left;border:4px solid rgb(49, 55, 63);overflow: auto;'>
+        </div>
+
+
+        </div>
+
+
+
+
+
+        <div id="map" class='center' style='height:98vh;width: 79%;border:4px solid rgb(49, 55, 63);box-sizing: border-box;'>
+        </div>
+        </div>
+    
+
+
+
+    <script>
+        var jsondata = [];
+        function initMap() {
+            
+            var mapOptions = {
+                center: new google.maps.LatLng('53.260990','-1.350890'),
+                zoom: 10
+            }
+            let map = new google.maps.Map(document.getElementById('map'),mapOptions);
+        };
+
+
+            function getCCTVList() {
+  var xhr = new XMLHttpRequest();
+  return new Promise((resolve, reject) => {
+    xhr.onreadystatechange = (e) => {
+      if (xhr.readyState !== 4) {
+        return;
+      }
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        console.warn('request_error');
+      }
+    };
+    xhr.open('GET', 'https://login.trackit247.com/api/api/ThirdParty/RequestLocation?AccountName=roadsidecctv&AccountPassword=R04dside114!&GetAll=True',false);
+    xhr.send();
+    jsondata.push(JSON.parse(xhr.responseText));
+  });
+}
+
+function getFleetList() {
+  var xhr = new XMLHttpRequest();
+  return new Promise((resolve, reject) => {
+    xhr.onreadystatechange = (e) => {
+      if (xhr.readyState !== 4) {
+        return;
+      }
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        console.warn('request_error');
+      }
+    };
+    xhr.open('GET', 'https://fleet.trackit247.com/api/api/GateHouse/RequestLocation?AccountName=roadsidetech&APIKEY=9dd5600b-f314-436e-abf7-b5eb43dec19d',false);
+    xhr.send();
+    jsondata.push(JSON.parse(xhr.responseText));
+  });
+}
+
+getCCTVList().then(res => res);
+getFleetList().then(res => res);
+jsondata.cctv = jsondata[0];
+jsondata.fleet = jsondata[1];
+
+//for(var i=0, len=jsondata.cctv.length; i < len; i++){console.log(jsondata[0][i])}
+//for(var i=0, len=jsondata.fleet.length; i < len; i++){console.log(jsondata[1][i])}
+
+console.log(jsondata.cctv);
+
+    </script>    
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDclbTLYa_9Y0QN2IrSqiHzezSBGJSWHgs&callback=initMap"></script>
+
+
+
+</body>
+</html>
